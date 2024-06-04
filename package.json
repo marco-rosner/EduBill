@@ -15,12 +15,16 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "tailwindcss": "3.4.1",
-    "typescript": "5.3.3"
+    "typescript": "^5.4.5"
   },
   "devDependencies": {
+    "@snaplet/copycat": "^5.0.0",
+    "@snaplet/seed": "^0.97.20",
     "@types/node": "20.11.5",
-    "@types/react": "18.2.48",
+    "@types/pg": "^8.11.6",
+    "@types/react": "^18.3.3",
     "@types/react-dom": "18.2.18",
-    "encoding": "^0.1.13"
+    "encoding": "^0.1.13",
+    "pg": "^8.12.0"
   }
 }
