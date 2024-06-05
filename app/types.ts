@@ -26,6 +26,18 @@ interface Invoice {
     interestAmount?: number; // calculated interest amount on unpaid balance
 }
 
+interface Invoice_DB {
+    id: string;
+    customer_id: string;
+    status: InvoiceStatus;
+    total_amount: number;
+    create_at: string;
+    due_date: string;
+    update_at: string;
+    interest_rate: number;
+    interest_amount: number
+}
+
 // InvoiceLineItem model
 interface InvoiceLineItem {
     id: string;
@@ -53,4 +65,4 @@ interface Refund {
     reason: string;
 }
 
-export { type Invoice, type InvoiceLineItem, type Payment, type Refund, InvoiceStatus, PaymentMethod }
+export { type Invoice, type Invoice_DB, type InvoiceLineItem, type Payment, type Refund, InvoiceStatus, PaymentMethod }
