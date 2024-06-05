@@ -1,5 +1,7 @@
 # EduBill
 
+A billing system for a subscription-based online education platform
+
 ## How to sync database model and create seed
 
 ```
@@ -12,6 +14,8 @@ npx tsx seed.ts > seed.sql
 - Seed.sql
 - Index page
 - List invoices
+- Pages layout
+- Create Invoice API
 
 ## To Do
 
