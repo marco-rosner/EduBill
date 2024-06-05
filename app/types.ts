@@ -30,6 +30,10 @@ interface Invoice_DB {
     id: string;
     customer_id: string;
     status: InvoiceStatus;
+    invoice_item: {
+        id: number;
+        description: string;
+    }[];
     total_amount: number;
     create_at: string;
     due_date: string;

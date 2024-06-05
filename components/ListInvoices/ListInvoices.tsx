@@ -17,19 +17,25 @@ export default function ListInvoices() {
                     <tr>
                         <th className="px-6 py-3">Invoice Id</th>
                         <th className="px-6 py-3">Status</th>
+                        <th className="px-6 py-3">Description</th>
                         <th className="px-6 py-3">Total Amount</th>
                         <th className="px-6 py-3">Due Date</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {data.map(({ id, status, total_amount: totalAmount, due_date: dueDate }) => (
-                        <tr key={id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <td className="px-6 py-4">{id}</td>
-                            <td className="px-6 py-4">{status}</td>
-                            <td className="px-6 py-4">{totalAmount}</td>
-                            <td className="px-6 py-4">{dueDate}</td>
-                        </tr>
-                    ))}
+                    {data.map(({ id, status, invoice_item: items, total_amount: totalAmount, due_date: dueDate }) => {
+                        const description = items.reduce((acc, cur) => `${cur.description}, ${acc}`, '')
+
+                        return (
+                            <tr key={id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                <td className="px-6 py-4">{id}</td>
+                                <td className="px-6 py-4">{status}</td>
+                                <td className="px-6 py-4">{description}</td>
+                                <td className="px-6 py-4">{`$ ${totalAmount.toFixed(2)}`}</td>
+                                <td className="px-6 py-4">{dueDate}</td>
+                            </tr>
+                        )
+                    })}
                 </tbody>
             </table>
         </div>
