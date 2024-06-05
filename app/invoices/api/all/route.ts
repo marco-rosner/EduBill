@@ -6,7 +6,7 @@ export const revalidate = 60
 export async function GET() {
     const supabase = createClient()
 
-    const res = await supabase.from('invoice').select('id, status, total_amount, due_date')
+    const res = await supabase.from('invoice').select('id, status, invoice_item( id, description ), total_amount, due_date')
 
     return NextResponse.json({ ...res })
 }
