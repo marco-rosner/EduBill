@@ -80,4 +80,15 @@ interface Refund {
     reason: string;
 }
 
-export { type Invoice, type Invoice_DB, type InvoiceLineItem, type Payment, type Payment_DB, type Refund, InvoiceStatus, PaymentMethod }
+interface Refund_DB {
+    id: string;
+    amount: number;
+    refund_date: Date;
+    reason: string;
+    invoice: {
+        id: number;
+        status: InvoiceStatus
+    }
+}
+
+export { type Invoice, type Invoice_DB, type InvoiceLineItem, type Payment, type Payment_DB, type Refund, type Refund_DB, InvoiceStatus, PaymentMethod }

@@ -20,3 +20,12 @@ export async function createPayment(formData: FormData) {
 
     redirect('/payments/list')
 }
+
+export async function createRefund(formData: FormData) {
+    const res = await fetch(
+        `${DEFAULT_URL}/refunds/api`,
+        { method: "POST", body: formData }
+    ).then(data => data.json())
+
+    redirect('/refunds/list')
+}

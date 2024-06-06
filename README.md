@@ -18,12 +18,13 @@ npx tsx seed.ts > seed.sql
 - Create Invoice API
 - Invoice page
 - Payment page
+- Refund page
 
 ## To Do
 
-- Refund page
 - Update Invoice
-- List Invoice by status
+- Lists by status and check total_amount
 - Interest calculation
+- Tests
 - Function: generate invoices monthly
 - Deploy to Vercel
