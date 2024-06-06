@@ -60,6 +60,17 @@ interface Payment {
     paymentMethod: PaymentMethod;
 }
 
+interface Payment_DB {
+    id: string;
+    amount: number;
+    payment_date: Date;
+    payment_method: PaymentMethod;
+    invoice: {
+        id: number;
+        status: InvoiceStatus
+    }
+}
+
 // Refund model
 interface Refund {
     id: string;
@@ -69,4 +80,4 @@ interface Refund {
     reason: string;
 }
 
-export { type Invoice, type Invoice_DB, type InvoiceLineItem, type Payment, type Refund, InvoiceStatus, PaymentMethod }
+export { type Invoice, type Invoice_DB, type InvoiceLineItem, type Payment, type Payment_DB, type Refund, InvoiceStatus, PaymentMethod }

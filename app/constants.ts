@@ -4,4 +4,16 @@ export const DEFAULT_URL = process.env.VERCEL_URL
 
 export const CUSTOMER_ID = 1
 
-export const INVOICE_STATUS = ['Pending', 'Paid', 'Partially Paid', 'Refunded', 'Partially Refunded']
+export const INVOICE_STATUS = {
+    pending: 'Pending',
+    paid: 'Paid',
+    partially_paid: 'Partially Paid',
+    refunded: 'Refunded',
+    partially_refunded: 'Partially Refunded',
+}
+
+export const PAYMENT_METHOD = {
+    credit_card: 'Credit Card',
+    bank_transfer: 'Bank Transfer',
+    paypal: 'PayPal'
+}

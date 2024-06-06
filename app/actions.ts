@@ -11,3 +11,12 @@ export async function createInvoice(formData: FormData) {
 
     redirect('/')
 }
+
+export async function createPayment(formData: FormData) {
+    const res = await fetch(
+        `${DEFAULT_URL}/payments/api`,
+        { method: "POST", body: formData }
+    ).then(data => data.json())
+
+    redirect('/payments/list')
+}

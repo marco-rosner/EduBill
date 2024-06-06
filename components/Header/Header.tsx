@@ -5,7 +5,7 @@ export const Header = (): React.ReactElement => (
       <span className="border-l rotate-180 m-5 h-6" />
       <a href="/invoices">Invoices</a>
       <span className="border-l rotate-180 m-5 h-6" />
-      <span>Payments (No link)</span>
+      <a href="/payments">Payments</a>
       <span className="border-l rotate-180 m-5 h-6" />
       <span>Refund (No link)</span>
     </div>

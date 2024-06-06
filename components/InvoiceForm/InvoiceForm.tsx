@@ -11,11 +11,6 @@ interface InvoiceFormInterface {
     update?: boolean
 }
 
-interface InvoiceFormState {
-    status: number,
-    statusText: string
-}
-
 export interface SubscriptionInterface {
     id: number,
     amountTotal: number
@@ -65,7 +60,7 @@ export const InvoiceForm = ({ update = false }: InvoiceFormInterface): React.Rea
                     {update ? <StatusSelect /> : (
                         <>
                             <input type="text" name="customerId" id="customerId" className="hidden" value={CUSTOMER_ID} readOnly />
-                            <input type="text" name="status" id="status" className="hidden" value={INVOICE_STATUS[0]} readOnly />
+                            <input type="text" name="status" id="status" className="hidden" value={INVOICE_STATUS.pending} readOnly />
                             <input type="text" name="subscriptionsLength" id="subscriptionsLength" className="hidden" value={subscriptions.length} readOnly />
                             <input type="text" name="dueDate" id="dueDate" className="hidden" value={dueDate?.startDate?.toString()} readOnly />
                         </>

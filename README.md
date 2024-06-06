@@ -17,10 +17,10 @@ npx tsx seed.ts > seed.sql
 - Pages layout
 - Create Invoice API
 - Invoice page
+- Payment page
 
 ## To Do
 
-- Payment page
 - Refund page
 - Update Invoice
 - List Invoice by status
