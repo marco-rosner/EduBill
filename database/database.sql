@@ -9,6 +9,7 @@ create table
     interest_rate real null,
     interest_amount real null,
     customer_id bigint null default '1'::bigint,
+    credit real null default '0'::bigint,
     constraint Invoice_pkey primary key (id),
     constraint invoice_id_key unique (id)
   ) tablespace pg_default;
