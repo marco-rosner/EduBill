@@ -10,42 +10,36 @@ export async function POST(request: NextRequest) {
 
     const invoiceId = formData.get('invoiceId')
     const invoiceStatus = formData.get('invoiceStatus')
-
     const paymentAmount = Number(formData.get('amount'))
     const isPartiallyPaid = invoiceStatus === InvoiceStatus.PARTIALLY_PAID
-    let resInvoice
-    let newTotalAmount
+
+    const res = await supabase.from('invoice').select("total_amount, credit").eq('id', invoiceId)
+    const totalAmount = res.data && res.data[0].total_amount
+    let query
 
     if (isPartiallyPaid) {
-        const res = await supabase.from('invoice').select("total_amount").eq('id', invoiceId)
+        const newTotalAmount = totalAmount - paymentAmount
+        const credit = res.data && res.data[0].credit + Math.abs(Number(newTotalAmount))
 
-        newTotalAmount = res.data && res.data[0].total_amount - paymentAmount
         const isPaid = Number(newTotalAmount) <= 0
         const updatePayload = isPaid ?
-            { status: InvoiceStatus.PAID, total_amount: 0 } :
-            { status: invoiceStatus, total_amount: newTotalAmount }
+            { status: InvoiceStatus.PAID, total_amount: 0, credit } :
+            { status: InvoiceStatus.PARTIALLY_PAID, total_amount: newTotalAmount }
 
-        resInvoice = await supabase.from('invoice')
+        query = supabase.from('invoice')
             .update(updatePayload)
-            .eq('id', invoiceId)
-            .select("status, total_amount")
     } else {
-        resInvoice = await supabase.from('invoice')
-            .update({ status: invoiceStatus, total_amount: 0 })
-            .eq('id', invoiceId)
-            .select("status, total_amount")
+        query = supabase.from('invoice')
+            .update({ status: InvoiceStatus.PAID, total_amount: 0 })
     }
 
-    if (resInvoice.status != 200) return NextResponse.json({ ...resInvoice })
+    const resInvoice = await query.eq('id', invoiceId)
 
-    const isPartiallyPaidUpdated = resInvoice.data &&
-        resInvoice.data[0].status === InvoiceStatus.PARTIALLY_PAID
+    if (resInvoice.status != 204) return NextResponse.json({ ...resInvoice })
 
     const payment = {
         invoice_id: invoiceId,
-        amount: isPartiallyPaidUpdated ?
-            paymentAmount :
-            resInvoice.data && resInvoice.data[0].total_amount,
+        amount: isPartiallyPaid ? paymentAmount : totalAmount,
         payment_date: formData.get('paymentDate'),
         payment_method: formData.get('paymentMethod')
     }

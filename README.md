@@ -42,3 +42,6 @@ npx tsx seed.ts > seed.sql
 - Tests
 - Function: generate invoices monthly
 - Deploy to Vercel
+
+## Future improvements
+- Add a invoice transactions table to save the invoice history

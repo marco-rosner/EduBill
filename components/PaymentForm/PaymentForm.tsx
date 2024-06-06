@@ -92,8 +92,7 @@ export const PaymentForm = (): React.ReactElement => {
                                 </div>
                             </div>
                         </>
-                    )
-                    }
+                    )}
                     <button className="bg-blue-500 hover:bg-blue-700 text-white px-2 rounded mx-2" type="submit">Pay</button>
                 </div>
             </form>
