@@ -8,7 +8,7 @@ export default function ListPayments() {
     if (error) return <>{error.message}</>
 
     if (loading) return <>Loading...</>
-    console.log(data)
+
     return (
         <div className="flex-1 flex flex-col gap-6">
             <h2 className="font-bold text-4xl mb-4">List Payments</h2>

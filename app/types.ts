@@ -18,6 +18,7 @@ interface Invoice {
     customerId: string;
     status: InvoiceStatus;
     totalAmount: number;
+    credit: number;
     createdAt: Date;
     dueDate: Date;
     updatedAt: Date;
@@ -35,6 +36,7 @@ interface Invoice_DB {
         description: string;
     }[];
     total_amount: number;
+    credit: number;
     create_at: string;
     due_date: string;
     update_at: string;
