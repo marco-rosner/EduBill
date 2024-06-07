@@ -12,6 +12,15 @@ export async function createInvoice(formData: FormData) {
     redirect('/')
 }
 
+export async function updateInvoice(formData: FormData) {
+    const res = await fetch(
+        `${DEFAULT_URL}/invoices/api`,
+        { method: "PUT", body: formData }
+    ).then(data => data.json())
+
+    redirect('/')
+}
+
 export async function createPayment(formData: FormData) {
     const res = await fetch(
         `${DEFAULT_URL}/payments/api`,

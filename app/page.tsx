@@ -8,7 +8,7 @@ const Index = () => (
     <Title title="EduBill" />
     <ListInvoices
       title="Current invoices"
-      nextStep="/invoice"
+      nextStep="/invoices"
       filters={{ status: [InvoiceStatus.PENDING] }}
       hasMenu />
   </WrapperContent>

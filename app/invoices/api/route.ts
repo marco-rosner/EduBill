@@ -8,7 +8,59 @@ export async function GET(request: NextRequest) {
     const id = searchParams.get('id')
 
     const supabase = createClient()
-    const res = await supabase.from('invoice').select().eq('id', id)
+    const res = await supabase.from('invoice').select(`
+        id,
+        status,
+        credit,
+        total_amount,
+        due_date,
+        interest_amount,
+        interest_rate,
+        invoice_item(
+            id,
+            description,
+            quantity,
+            total_amount,
+            unit_price
+        )
+        `).eq('id', id)
+
+    return NextResponse.json({ ...res })
+}
+
+export async function PUT(request: NextRequest) {
+    const supabase = createClient()
+    const formData = await request.formData()
+
+    const invoiceId = formData.get('invoiceId')
+    const invoice = {
+        status: formData.get('status')?.toString().toLowerCase(),
+        total_amount: Number(formData.get('totalAmount')),
+        credit: Number(formData.get('credit')),
+        due_date: formData.get('dueDate'),
+        interest_rate: Number(formData.get('interestRate')),
+        interest_amount: Number(formData.get('interestAmount'))
+    }
+
+    const res = await supabase.from('invoice').update(invoice).eq('id', invoiceId)
+
+    if (res.status != 204) return NextResponse.json({ ...res })
+
+    const subLength = Number(formData.get('subscriptionsLength'))
+
+    for (let i = 0; i <= subLength - 1; i++) {
+        const subId = formData.get(`id-${i}`)
+        const subscription = {
+            description: formData.get(`description-${i}`),
+            quantity: Number(formData.get(`quantity-${i}`)),
+            unit_price: Number(formData.get(`unitPrice-${i}`)),
+            total_amount: Number(formData.get(`totalAmount-${i}`))
+        }
+
+        const resSub = await supabase.from('invoice_item').update(subscription).eq('id', subId)
+
+        if (resSub.status != 204) return NextResponse.json({ ...resSub })
+    }
 
     return NextResponse.json({ ...res })
 }

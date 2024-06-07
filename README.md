@@ -34,12 +34,12 @@ npx tsx seed.ts > seed.sql
 - Payment page
 - Refund page
 - Lists by status and credit
+- Update Invoice
 
 ## To Do
 
-- Update Invoice
-- Interest calculation
 - Tests
+- Interest calculation
 - Function: generate invoices monthly
 - Deploy to Vercel
 

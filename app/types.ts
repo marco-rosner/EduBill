@@ -17,6 +17,13 @@ interface Invoice {
     id: string;
     customerId: string;
     status: InvoiceStatus;
+    invoiceItem: {
+        id: number;
+        description: string;
+        quantity: number;
+        totalAmount: number;
+        unitPrice: number;
+    }[];
     totalAmount: number;
     credit: number;
     createdAt: Date;
@@ -34,6 +41,9 @@ interface Invoice_DB {
     invoice_item: {
         id: number;
         description: string;
+        quantity: number;
+        total_amount: number;
+        unit_price: number;
     }[];
     total_amount: number;
     credit: number;

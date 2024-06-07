@@ -72,7 +72,7 @@ export default function ListInvoices({ title, nextStep, filters, hasMenu }: List
                     ) : data.map((
                         { id, status, invoice_item: items, total_amount: totalAmount, credit, due_date: dueDate }
                     ) => (
-                        <tr key={id} onClick={() => router.replace(`${nextStep}?id=${id}`)} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer">
+                        <tr key={id} onClick={() => router.replace(`${nextStep}/${id}`)} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer">
                             <td className="px-6 py-4">{id}</td>
                             <td className="px-6 py-4">{status}</td>
                             <td className="px-6 py-4">{items.map(item => item.description).toString()}</td>
