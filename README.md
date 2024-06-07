@@ -16,6 +16,10 @@ In the Payments page, the list will show the invoices filtered by status in pend
 
 In the Refund page, the list will show the invoices filtered by status in paid or partiallly refunded.
 
+## Apply Interest
+
+There a button on Header that will call a stored procedure ([code here](./database/applyInterest.pgsql)) on database (postgresql/supabase) to calculate the interest for all invoice that pass the due data and the status is not paid and has positive value on total_amount attribute.
+
 ## How to sync database model and create seed
 
 ```
@@ -35,12 +39,13 @@ npx tsx seed.ts > seed.sql
 - Refund page
 - Lists by status and credit
 - Update Invoice
+- Interest calculation
 
 ## To Do
 
+- Error Handling
 - Tests
-- Interest calculation
-- Function: generate invoices monthly
+- Validate types API
 - Deploy to Vercel
 
 ## Future improvements

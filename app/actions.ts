@@ -21,6 +21,17 @@ export async function updateInvoice(formData: FormData) {
     redirect('/')
 }
 
+export async function applyInterest() {
+    const { error } = await fetch(
+        `${DEFAULT_URL}/invoices/api/applyInterest`).then(data => data.json())
+
+    if (error) {
+        return { error }
+    }
+
+    redirect('/')
+}
+
 export async function createPayment(formData: FormData) {
     const res = await fetch(
         `${DEFAULT_URL}/payments/api`,

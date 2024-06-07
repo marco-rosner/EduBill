@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
 
     const subLength = Number(formData.get('subscriptionsLength'))
 
-    for (let i = 1; i <= subLength; i++) {
+    for (let i = 0; i <= subLength - 1; i++) {
         const subscription = {
             description: formData.get(`description-${i}`),
             quantity: Number(formData.get(`quantity-${i}`)),
