@@ -20,6 +20,10 @@ In the Refund page, the list will show the invoices filtered by status in paid o
 
 There a button on Header that will call a stored procedure ([code here](./database/applyInterest.pgsql)) on database (postgresql/supabase) to calculate the interest for all invoice that pass the due data and the status is not paid and has positive value on total_amount attribute.
 
+## Test and Validations
+
+As the Coding Challenge focuses on the backend, I focused on the test suite and validations only on the API side. After the assessment, I will add the test and validations on the FrontEnd side.
+
 ## How to sync database model and create seed
 
 ```
@@ -42,11 +46,9 @@ npx tsx seed.ts > seed.sql
 - Interest calculation
 - Improve Error Handling
 - Validate types API
-
-## To Do
-
-- Tests
+- Tests API
 - Deploy to Vercel
 
 ## Future improvements
 - Add a invoice transactions table to save the invoice history
+- Tests and validations on FrontEnd side
