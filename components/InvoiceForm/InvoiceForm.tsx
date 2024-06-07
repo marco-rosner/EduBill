@@ -90,11 +90,11 @@ export const InvoiceForm = ({ invoiceDB }: InvoiceFormInterface): React.ReactEle
                         (<SubscriptionItemField key={sub.id} index={i} {...sub} updateTotal={updateTotal} setSubscriptions={setSubscriptions} />)
                     )}
 
-                    <div className="sm:col-span-6 flex justify-end">
+                    <div className="sm:col-span-6 flex justify-end items-center">
                         <button
                             type="button"
                             onClick={onClickSubscription}
-                            className="bg-blue-500 hover:bg-blue-700 text-white px-2 rounded mx-2">Add subscriptions</button>
+                            className="bg-blue-500 hover:bg-blue-700 text-white px-2 rounded">Add subscriptions</button>
                     </div>
                     <div className="sm:col-span-3 flex justify-center items-center">
                         <label
@@ -159,9 +159,10 @@ export const InvoiceForm = ({ invoiceDB }: InvoiceFormInterface): React.ReactEle
                             <span>Total Invoice: {invoiceTotal}</span>
                         </div>
                     </div>
-
+                    <div className="sm:col-span-6 flex justify-end items-end">
+                        <button className="bg-blue-500 hover:bg-blue-700 text-white px-2 rounded" type="submit">{updateMode ? 'Update' : 'Create'}</button>
+                    </div>
                 </div>
-                <button className="bg-blue-500 hover:bg-blue-700 text-white px-2 rounded mx-2" type="submit">{updateMode ? 'Update' : 'Create'}</button>
             </form>
         </div>
 

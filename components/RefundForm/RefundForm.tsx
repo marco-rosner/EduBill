@@ -107,8 +107,9 @@ export const RefundForm = (): React.ReactElement => {
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 text-right shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                         </div>
                     </div>
-
-                    <button className="bg-blue-500 hover:bg-blue-700 text-white px-2 rounded mx-2" type="submit">Refund</button>
+                    <div className="sm:col-span-6 flex justify-end items-end">
+                        <button className="bg-blue-500 hover:bg-blue-700 text-white px-2 rounded" type="submit">Refund</button>
+                    </div>
                 </div>
             </form>
         </div>
