@@ -41,11 +41,11 @@ npx tsx seed.ts > seed.sql
 - Update Invoice
 - Interest calculation
 - Improve Error Handling
+- Validate types API
 
 ## To Do
 
 - Tests
-- Validate types API
 - Deploy to Vercel
 
 ## Future improvements

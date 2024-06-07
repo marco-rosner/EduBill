@@ -1,7 +1,10 @@
 import { InvoiceStatus } from "@/app/types"
+import { validateSingleValue } from "@/app/validation"
 import { createClient } from "@/utils/supabase/server"
 import { NextRequest, NextResponse } from "next/server"
 import { getRefund, getUpdatePayload } from "./helpers"
+import { z } from "zod"
+import { validateRefund } from "./validation"
 
 export const revalidate = 60
 
@@ -12,6 +15,11 @@ export async function POST(request: NextRequest) {
     const invoiceId = formData.get('invoiceId')
     const invoiceStatus = formData.get('invoiceStatus')
     const refundAmount = Number(formData.get('amount'))
+
+    validateSingleValue(invoiceId, z.number())
+    validateSingleValue(invoiceStatus, z.nativeEnum(InvoiceStatus))
+    validateSingleValue(refundAmount, z.number())
+
     const isPartiallyRefunded = invoiceStatus === InvoiceStatus.PARTIALLY_REFUNDED
 
     const res = await supabase.from('invoice').select("total_amount, credit").eq('id', invoiceId)
@@ -35,6 +43,8 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: resInvoice.error }, { status: resInvoice.status, statusText: resInvoice.statusText })
 
     const refund = getRefund(invoiceId, isPartiallyRefunded, refundAmount, credit, formData)
+
+    validateRefund(refund)
 
     const resRefund = await supabase.from('refund').insert(refund)
     if (resRefund.error)

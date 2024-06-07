@@ -1,12 +1,17 @@
 import { createClient } from "@/utils/supabase/server"
 import { NextRequest, NextResponse } from "next/server"
 import { getInvoicePOST, getInvoicePUT, getSubscription } from "./helpers"
+import { z } from "zod"
+import { validatePost, validatePut, validateSubscription } from "./validation"
+import { validateSingleValue } from "@/app/validation"
 
 export const revalidate = 60
 
 export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams
-    const id = searchParams.get('id')
+    const id = Number(searchParams.get('id'))
+
+    validateSingleValue(id, z.number())
 
     const supabase = createClient()
     const res = await supabase.from('invoice').select(`
@@ -38,6 +43,8 @@ export async function PUT(request: NextRequest) {
     const invoiceId = formData.get('invoiceId')
     const invoice = getInvoicePUT(formData)
 
+    validatePut(invoice)
+
     const res = await supabase.from('invoice').update(invoice).eq('id', invoiceId)
     if (res.error) return NextResponse.json({ error: res.error }, { status: res.status, statusText: res.statusText })
 
@@ -46,6 +53,8 @@ export async function PUT(request: NextRequest) {
     for (let i = 0; i <= subLength - 1; i++) {
         const subId = formData.get(`id-${i}`)
         const subscription = getSubscription(formData, i)
+
+        validateSubscription(subscription)
 
         const resSub = await supabase.from('invoice_item').update(subscription).eq('id', subId)
         if (resSub.error) return NextResponse.json({ error: resSub.error }, { status: resSub.status, statusText: resSub.statusText })
@@ -60,6 +69,8 @@ export async function POST(request: NextRequest) {
 
     const invoice = getInvoicePOST(formData)
 
+    validatePost(invoice)
+
     const res = await supabase.from('invoice').insert(invoice).select('id')
     if (res.error) return NextResponse.json({ error: res.error }, { status: res.status, statusText: res.statusText })
 
@@ -67,6 +78,8 @@ export async function POST(request: NextRequest) {
 
     for (let i = 0; i <= subLength - 1; i++) {
         const subscription = getSubscription(formData, i)
+
+        validateSubscription(subscription)
 
         const resSub = await supabase.from('invoice_item').insert(subscription).select('id')
         if (resSub.error) return NextResponse.json({ error: resSub.error }, { status: resSub.status, statusText: resSub.statusText })
