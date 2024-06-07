@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
 
     const res = await supabase.rpc("applyInterest")
 
-    if (res.error) return NextResponse.json({ error: res.error }, { status: Number(res.error.code) })
+    if (res.error) return NextResponse.json({ error: res.error }, { status: res.status, statusText: res.statusText })
 
-    return NextResponse.json({ ...res })
+    return NextResponse.json(res)
 }

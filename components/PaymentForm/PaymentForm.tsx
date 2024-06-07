@@ -9,7 +9,7 @@ import { MethodSelect } from "./MethodField"
 
 export const PaymentForm = (): React.ReactElement => {
     const [activeAmount, setActiveAmount] = useState<boolean>(false)
-    const [paymentDate, setPaymentDate] = useState<DateValueType>({ startDate: new Date(), endDate: null })
+    const [paymentDate, setPaymentDate] = useState<DateValueType>({ startDate: new Date().toUTCString(), endDate: new Date().toUTCString() })
     const searchParams = useSearchParams()
     const invoiceId = searchParams.get('id')
 
@@ -55,7 +55,7 @@ export const PaymentForm = (): React.ReactElement => {
                                     name="invoiceStatus"
                                     type="radio"
                                     value={InvoiceStatus.PAID}
-                                    onClick={() => setActiveAmount(false)}
+                                    onChange={() => setActiveAmount(false)}
                                     checked={!activeAmount}
                                     className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600 mr-2" />
                                 <label htmlFor="invoiceStatus" className="block text-sm font-medium leading-6 text-gray-900">Total</label>
@@ -66,7 +66,7 @@ export const PaymentForm = (): React.ReactElement => {
                                     name="invoiceStatus"
                                     type="radio"
                                     value={InvoiceStatus.PARTIALLY_PAID}
-                                    onClick={() => setActiveAmount(true)}
+                                    onChange={() => setActiveAmount(true)}
                                     className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600 mr-2" />
                                 <label htmlFor="invoiceStatus" className="block text-sm font-medium leading-6 text-gray-900">Partial</label>
                             </div>

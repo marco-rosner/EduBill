@@ -19,7 +19,7 @@ const INITIAL_SUBSCRIPTION: Invoice["invoiceItem"] = [{
 export const InvoiceForm = ({ invoiceDB }: InvoiceFormInterface): React.ReactElement => {
     const [subscriptions, setSubscriptions] = useState(INITIAL_SUBSCRIPTION)
     const [invoice, _] = useState<Invoice_DB[]>(invoiceDB ? invoiceDB : [])
-    const [dueDate, setDueDate] = useState<DateValueType>({ startDate: new Date(), endDate: new Date() })
+    const [dueDate, setDueDate] = useState<DateValueType>({ startDate: new Date().toUTCString(), endDate: new Date().toUTCString() })
     const updateMode = invoice.length === 1
 
     useEffect(() => {

@@ -19,5 +19,7 @@ export async function GET(req: NextRequest) {
 
     const res = await query
 
-    return NextResponse.json({ ...res })
+    if (res.error) return NextResponse.json({ error: res.error }, { status: res.status, statusText: res.statusText })
+
+    return NextResponse.json(res)
 }

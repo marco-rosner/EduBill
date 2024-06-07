@@ -1,6 +1,7 @@
 import { InvoiceStatus } from "@/app/types"
 import { createClient } from "@/utils/supabase/server"
 import { NextRequest, NextResponse } from "next/server"
+import { getRefund, getUpdatePayload } from "./helpers"
 
 export const revalidate = 60
 
@@ -14,16 +15,13 @@ export async function POST(request: NextRequest) {
     const isPartiallyRefunded = invoiceStatus === InvoiceStatus.PARTIALLY_REFUNDED
 
     const res = await supabase.from('invoice').select("total_amount, credit").eq('id', invoiceId)
+    if (res.error) return NextResponse.json({ error: res.error }, { status: res.status, statusText: res.statusText })
+
     const credit = res.data && res.data[0].credit
     let query
 
     if (isPartiallyRefunded) {
-        const newCredit = credit - refundAmount
-
-        const isRefunded = Number(newCredit) <= 0
-        const updatePayload = isRefunded ?
-            { status: InvoiceStatus.REFUNDED, credit: 0 } :
-            { status: InvoiceStatus.PARTIALLY_REFUNDED, credit: newCredit }
+        const updatePayload = getUpdatePayload(credit, refundAmount)
 
         query = supabase.from('invoice')
             .update(updatePayload)
@@ -33,19 +31,15 @@ export async function POST(request: NextRequest) {
     }
 
     const resInvoice = await query.eq('id', invoiceId)
+    if (resInvoice.error)
+        return NextResponse.json({ error: resInvoice.error }, { status: resInvoice.status, statusText: resInvoice.statusText })
 
-    if (resInvoice.status != 204) return NextResponse.json({ ...resInvoice })
-
-    const refund = {
-        invoice_id: invoiceId,
-        amount: isPartiallyRefunded ? refundAmount : credit,
-        refund_date: formData.get('refundDate'),
-        reason: formData.get('reason')
-    }
+    const refund = getRefund(invoiceId, isPartiallyRefunded, refundAmount, credit, formData)
 
     const resRefund = await supabase.from('refund').insert(refund)
+    if (resRefund.error)
+        return NextResponse.json({ error: resRefund.error }, { status: resRefund.status, statusText: resRefund.statusText })
 
-    if (resRefund.status != 201) return NextResponse.json({ ...resRefund })
 
-    return NextResponse.json({ ...resRefund })
+    return NextResponse.json(resRefund)
 }

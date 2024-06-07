@@ -1,6 +1,7 @@
 import { InvoiceStatus } from "@/app/types"
 import { createClient } from "@/utils/supabase/server"
 import { NextRequest, NextResponse } from "next/server"
+import { getPayment, getUpdatePayload } from "./helpers"
 
 export const revalidate = 60
 
@@ -14,17 +15,13 @@ export async function POST(request: NextRequest) {
     const isPartiallyPaid = invoiceStatus === InvoiceStatus.PARTIALLY_PAID
 
     const res = await supabase.from('invoice').select("total_amount, credit").eq('id', invoiceId)
+    if (res.error) return NextResponse.json({ error: res.error }, { status: res.status, statusText: res.statusText })
+
     const totalAmount = res.data && res.data[0].total_amount
     let query
 
     if (isPartiallyPaid) {
-        const newTotalAmount = totalAmount - paymentAmount
-        const credit = res.data && res.data[0].credit + Math.abs(Number(newTotalAmount))
-
-        const isPaid = Number(newTotalAmount) <= 0
-        const updatePayload = isPaid ?
-            { status: InvoiceStatus.PAID, total_amount: 0, credit } :
-            { status: InvoiceStatus.PARTIALLY_PAID, total_amount: newTotalAmount }
+        const updatePayload = getUpdatePayload(totalAmount, paymentAmount, res)
 
         query = supabase.from('invoice')
             .update(updatePayload)
@@ -35,18 +32,15 @@ export async function POST(request: NextRequest) {
 
     const resInvoice = await query.eq('id', invoiceId)
 
-    if (resInvoice.status != 204) return NextResponse.json({ ...resInvoice })
+    if (resInvoice.error)
+        return NextResponse.json({ error: resInvoice.error }, { status: resInvoice.status, statusText: resInvoice.statusText })
 
-    const payment = {
-        invoice_id: invoiceId,
-        amount: isPartiallyPaid ? paymentAmount : totalAmount,
-        payment_date: formData.get('paymentDate'),
-        payment_method: formData.get('paymentMethod')
-    }
+    const payment = getPayment(invoiceId, isPartiallyPaid, paymentAmount, totalAmount, formData)
 
     const resPayment = await supabase.from('payment').insert(payment)
 
-    if (resPayment.status != 201) return NextResponse.json({ ...resPayment })
+    if (resPayment.error)
+        return NextResponse.json({ error: resPayment.error }, { status: resPayment.status, statusText: resPayment.statusText })
 
-    return NextResponse.json({ ...resPayment })
+    return NextResponse.json(resPayment)
 }

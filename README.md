@@ -40,10 +40,10 @@ npx tsx seed.ts > seed.sql
 - Lists by status and credit
 - Update Invoice
 - Interest calculation
+- Improve Error Handling
 
 ## To Do
 
-- Error Handling
 - Tests
 - Validate types API
 - Deploy to Vercel

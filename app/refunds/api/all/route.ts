@@ -8,6 +8,7 @@ export async function GET() {
 
     const res = await supabase.from('refund')
         .select('id, amount, invoice( id, status ), refund_date, reason')
+    if (res.error) return NextResponse.json({ error: res.error }, { status: res.status, statusText: res.statusText })
 
-    return NextResponse.json({ ...res })
+    return NextResponse.json(res)
 }
