@@ -23,7 +23,6 @@ const server = setupServer(
         })
 );
 
-// Ideally you'd move this to a setupTests file
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());

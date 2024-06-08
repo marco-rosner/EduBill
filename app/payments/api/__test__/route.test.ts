@@ -20,6 +20,11 @@ const mockFormData = {
     amount: '2'
 }
 
+const mockFormDataInvalidId = {
+    ...mockFormData,
+    invoiceId: 'sd'
+}
+
 const server = setupServer(
     http.all(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/payment`,
         ({ request, params, requestId }) => {
@@ -32,7 +37,6 @@ const server = setupServer(
         })
 );
 
-// Ideally you'd move this to a setupTests file
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
@@ -49,6 +53,20 @@ describe('Payment api', () => {
                 expect(data.data).toEqual(['payment'])
                 expect(error).toBe(null)
                 expect(statusText).toBe("OK")
+            },
+        });
+    });
+
+    it("POST returns 400 - Validation error", async () => {
+        await testApiHandler({
+            appHandler,
+            test: async ({ fetch }) => {
+                const response = await fetch({ method: "POST", body: serialize(mockFormDataInvalidId) });
+                const { error } = await response.json();
+                expect(response.status).toBe(400);
+                expect(error).toStrictEqual(
+                    { "code": "22P02", "details": null, "hint": null, "message": "invalid input syntax for type bigint: \"sd\"" }
+                )
             },
         });
     });

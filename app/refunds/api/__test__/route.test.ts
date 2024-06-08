@@ -20,6 +20,11 @@ const mockFormData = {
     reason: 'Reason'
 }
 
+const mockFormDataInvalidId = {
+    ...mockFormData,
+    invoiceId: 'sp'
+}
+
 const server = setupServer(
     http.all(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/refund`,
         ({ request, params, requestId }) => {
@@ -32,7 +37,6 @@ const server = setupServer(
         })
 );
 
-// Ideally you'd move this to a setupTests file
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
@@ -41,7 +45,7 @@ describe('Refund api', () => {
     it("POST returns 200", async () => {
         await testApiHandler({
             appHandler,
-            test: async ({ fetch }) => {
+            test: async ({ fetch, }) => {
                 const response = await fetch({ method: "POST", body: serialize(mockFormData) });
                 const { count, data, error, statusText } = await response.json();
                 expect(response.status).toBe(200);
@@ -50,6 +54,20 @@ describe('Refund api', () => {
                 expect(error).toBe(null)
                 expect(statusText).toBe("OK")
             },
+        });
+    });
+
+    it("POST returns 400 - Validation error", async () => {
+        await testApiHandler({
+            appHandler,
+            test: async ({ fetch }) => {
+                const response = await fetch({ method: "POST", body: serialize(mockFormDataInvalidId) });
+                const { error } = await response.json();
+                expect(response.status).toBe(400);
+                expect(error).toStrictEqual(
+                    { "code": "22P02", "details": null, "hint": null, "message": "invalid input syntax for type bigint: \"sp\"" }
+                )
+            }
         });
     });
 })

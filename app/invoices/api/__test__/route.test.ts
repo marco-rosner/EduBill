@@ -32,6 +32,11 @@ const mockFormPOSTData = {
     totalAmount: '10'
 }
 
+const mockFormPOSTDataInvalidId = {
+    ...mockFormPOSTData,
+    customerId: 'sd'
+}
+
 const mockFormPUTData = {
     status: 'pending',
     subscriptionsLength: '1',
@@ -48,11 +53,17 @@ const mockFormPUTData = {
     totalAmount: '10'
 }
 
+const mockFormPUTDataInvalidId = {
+    ...mockFormPUTData,
+    customerId: 'sd'
+}
+
 const server = setupServer(
     http.all(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/refund`,
         ({ request, params, requestId }) => {
             switch (request.method) {
                 case "POST":
+
                     return HttpResponse.json(mockPOSTResponse);
                 case "PUT":
                     return HttpResponse.json(mockPUTResponse);
@@ -62,7 +73,6 @@ const server = setupServer(
         })
 );
 
-// Ideally you'd move this to a setupTests file
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
@@ -82,6 +92,20 @@ describe('Invoice api', () => {
         });
     });
 
+    it("POST returns 400 - Validation error", async () => {
+        await testApiHandler({
+            appHandler,
+            test: async ({ fetch }) => {
+                const response = await fetch({ method: "POST", body: serialize(mockFormPOSTDataInvalidId) });
+                const { error } = await response.json();
+                expect(response.status).toBe(400);
+                expect(error).toStrictEqual(
+                    { "code": "22P02", "details": null, "hint": null, "message": "invalid input syntax for type bigint: \"sd\"" }
+                )
+            },
+        });
+    });
+
     it("PUT returns 200", async () => {
         await testApiHandler({
             appHandler,
@@ -92,6 +116,20 @@ describe('Invoice api', () => {
                 expect(count).toBe(null)
                 expect(error).toBe(null)
                 expect(statusText).toBe("No Content")
+            },
+        });
+    });
+
+    it("POST returns 400 - Validation error", async () => {
+        await testApiHandler({
+            appHandler,
+            test: async ({ fetch }) => {
+                const response = await fetch({ method: "POST", body: serialize(mockFormPUTDataInvalidId) });
+                const { error } = await response.json();
+                expect(response.status).toBe(400);
+                expect(error).toStrictEqual(
+                    { "code": "22P02", "details": null, "hint": null, "message": "invalid input syntax for type bigint: \"sd\"" }
+                )
             },
         });
     });

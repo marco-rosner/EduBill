@@ -11,7 +11,6 @@ export async function GET(req: NextRequest) {
     const url = new URL(req.url)
     const status = url.searchParams.get('status')?.split(',')
     const credit = url.searchParams.get('creditGt')
-
     validateSingleValue(status, z.nativeEnum(InvoiceStatus))
     validateSingleValue(credit, z.number())
 
